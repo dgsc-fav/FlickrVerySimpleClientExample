@@ -18,7 +18,7 @@ android {
     defaultConfig {
         minSdkVersion(minSdkVersionGlobal)
         targetSdkVersion(targetSdkVersionGlobal)
-        
+
         versionCode = 1
         versionName = "1.0"
 
@@ -48,6 +48,8 @@ dependencies {
     //
     implementation("com.squareup.retrofit2:retrofit:2.5.0")
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+    //
+    api("com.jakewharton.timber:timber:4.7.1")
     //
     testImplementation("junit:junit:4.12")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")

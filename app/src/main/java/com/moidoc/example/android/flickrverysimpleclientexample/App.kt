@@ -1,3 +1,5 @@
+package com.moidoc.example.android.flickrverysimpleclientexample
+
 import android.app.Application
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.di.module.FlickrModule
 import com.moidoc.example.android.flickrverysimpleclientexample.di.component.AppComponent
@@ -5,11 +7,14 @@ import com.moidoc.example.android.flickrverysimpleclientexample.di.component.Dag
 import com.moidoc.example.android.flickrverysimpleclientexample.di.component.DaggerInfrastructureComponent
 import com.moidoc.example.android.flickrverysimpleclientexample.di.component.InfrastructureComponent
 import com.moidoc.example.android.flickrverysimpleclientexample.di.module.NetworkModule
+import timber.log.Timber
 
-class App: Application() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Timber.plant(Timber.DebugTree())
 
         // initialize dagger's components
         initComponents()

@@ -45,6 +45,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.1.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0")
     //
+    implementation("androidx.navigation:navigation-fragment-ktx:2.2.0-alpha03")
+    implementation("androidx.navigation:navigation-ui-ktx:2.2.0-alpha03")
+    //
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
     //
     testImplementation("junit:junit:4.12")

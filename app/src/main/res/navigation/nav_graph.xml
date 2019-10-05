@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/photosListFragment">
+
+    <fragment
+        android:id="@+id/photosListFragment"
+        android:name="com.moidoc.example.android.flickrverysimpleclientexample.ui.list.PhotosListFragment"
+        android:label="PhotosListFragment">
+        <action
+            android:id="@+id/action_photosListFragment_to_photoDetailFragment"
+            app:destination="@+id/photoDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/photoDetailFragment"
+        android:name="com.moidoc.example.android.flickrverysimpleclientexample.ui.detail.PhotoDetailFragment"
+        android:label="PhotoDetailFragment">
+        <argument
+            android:name="photoId"
+            app:argType="integer" />
+    </fragment>
+</navigation>
