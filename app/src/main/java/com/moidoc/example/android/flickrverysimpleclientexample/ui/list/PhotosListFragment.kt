@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.moidoc.example.android.flickrverysimpleclientexample.R
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.OnLoadListener
+import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarHolder
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapter.AdapterCallback
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapter.ClickType
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.decoration.GridSpacingItemDecoration
@@ -159,6 +160,12 @@ class PhotosListFragment : Fragment(), OnLoadListener {
         viewModel.photosList.observe(viewLifecycleOwner, listObserver)
 
         viewModel.onViewCreated(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        (activity as? ToolbarHolder)?.updateToolbar()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

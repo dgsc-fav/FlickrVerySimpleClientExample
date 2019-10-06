@@ -7,12 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.moidoc.example.android.flickrverysimpleclientexample.R
+import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarHolder
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarResolver
 
 /**
  * Single app activity
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+    ToolbarHolder {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         getNavFragment()?.childFragmentManager?.addOnBackStackChangedListener {
             updateToolbar()
         }
-        // todo fix it by adding ToolbarHolder
+
         updateToolbar()
     }
 
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     /**
      *  Update toolbar title, icons and etc. if "Single activity app" mean for you "Single toolbar implementation".
      */
-    private fun updateToolbar() {
+    override fun updateToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled((getTopNavigationScreen() as? ToolbarResolver)?.hasBackKey() == true)
     }
 

@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.moidoc.example.android.flickrverysimpleclientexample.R
+import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarHolder
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarResolver
 import kotlinx.android.synthetic.main.fragment_photo_detail.*
 import timber.log.Timber
@@ -91,6 +92,12 @@ class PhotoDetailFragment : Fragment(),
 
         viewModel.onViewCreated(requireContext(), arguments)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        (activity as? ToolbarHolder)?.updateToolbar()
     }
 
     /// ToolbarResolver functions
