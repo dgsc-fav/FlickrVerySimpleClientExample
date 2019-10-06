@@ -1,13 +1,20 @@
 package com.moidoc.example.android.flickrverysimpleclientexample.ui.list
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.moidoc.example.android.flickrverysimpleclientexample.R
+import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.OnLoadListener
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapter.AbsClickableViewHolder
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapter.AbsSortedAdapter
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapter.AdapterCallback
@@ -15,6 +22,7 @@ import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapte
 class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterCallback: AdapterCallback<PhotosListItem>) :
     AbsSortedAdapter<PhotosListItem, VH>(context, adapterCallback) {
 
+    var onLoadListener: OnLoadListener? = null
     private var recyclerView: RecyclerView? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -53,10 +61,37 @@ class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterC
         // the unique transition name as string representation of the item id
         h.image.transitionName = item.id.toString()
 
-        h.image.setImageResource(R.drawable.mm)
+        h.progress.visibility = View.VISIBLE
 
-        //if (pos.rem(5) == 0) h.progress.visibility = View.VISIBLE else
-        h.progress.visibility = View.GONE
+        item.urlId?.let {
+            
+            Glide.with(context)
+                .load(item.urlId)
+                .listener(object: RequestListener<Drawable>{
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        h.progress.visibility = View.GONE
+                        // also dispatch an event that image loaded with fail
+                        // we do not carry about loading result we just wonder about this process is finish
+                        onLoadListener?.onLoadOrError(item.id)
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        h.progress.visibility = View.GONE
+                        // also dispatch an event that image loaded successfully
+                        // we do not carry about loading result we just wonder about this process is finish
+                        onLoadListener?.onLoadOrError(item.id)
+                        return false
+                    }
+                })
+                .into(h.image)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {

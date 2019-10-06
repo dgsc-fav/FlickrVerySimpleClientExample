@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         getNavFragment()?.childFragmentManager?.addOnBackStackChangedListener {
             updateToolbar()
         }
-
+        // todo fix it by adding ToolbarHolder
         updateToolbar()
     }
 

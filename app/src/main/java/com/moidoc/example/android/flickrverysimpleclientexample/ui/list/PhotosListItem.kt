@@ -9,6 +9,12 @@ class PhotosListItem(
     // the flickr photo model (used direct from the models. if you a Clean Arch adept you can map [Photo] to other data class)
     val photo: Photo
 ) {
+    // for transition animation
     var adapterPosition: Int? = null
     var sharedView: View? = null
+
+    // url of the photo
+    var url: String? = null
+
+    var urlId: Int? = null
 }

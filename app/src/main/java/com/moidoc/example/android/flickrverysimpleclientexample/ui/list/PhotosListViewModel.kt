@@ -63,7 +63,9 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
 
         Handler().postDelayed(Runnable {
             val items = IntRange(0, 19).map {
-                PhotosListItem(id = it, photo = Photo.empty)
+                PhotosListItem(id = it, photo = Photo.empty).apply {
+                    urlId = R.drawable.mm
+                }
             }
 
             _photosList.postValue(items)
