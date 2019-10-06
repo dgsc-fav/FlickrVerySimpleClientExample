@@ -27,4 +27,8 @@ data class Photo(
     val secret: String,
     val server: String,
     val title: String
-)
+) {
+    companion object {
+        val empty = Photo(0, "", 0, 0, 0, "", "", "", "")
+    }
+}

@@ -21,7 +21,7 @@
         android:name="com.moidoc.example.android.flickrverysimpleclientexample.ui.detail.PhotoDetailFragment"
         android:label="PhotoDetailFragment">
         <argument
-            android:name="photoId"
+            android:name="@string/key_photo_id"
             app:argType="integer" />
     </fragment>
 </navigation>

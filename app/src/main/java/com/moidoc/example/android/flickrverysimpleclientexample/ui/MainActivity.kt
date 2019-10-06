@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         getNavFragment()?.childFragmentManager?.addOnBackStackChangedListener {
             updateToolbar()
         }
+
+        updateToolbar()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
