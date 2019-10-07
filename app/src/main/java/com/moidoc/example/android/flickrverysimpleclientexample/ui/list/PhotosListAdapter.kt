@@ -73,7 +73,7 @@ class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterC
                         h.progress.visibility = View.GONE
                         // also dispatch an event that image loaded with fail
                         // we do not carry about loading result we just wonder about this process is finish
-                        onLoadListener?.onLoadOrError(item.photo.id)
+                        onLoadListener?.onLoadOrError(item.photoId)
 
                         h.image.setImageResource(android.R.drawable.ic_menu_report_image)
                         return false
@@ -89,7 +89,7 @@ class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterC
                         h.progress.visibility = View.GONE
                         // also dispatch an event that image loaded successfully
                         // we do not carry about loading result we just wonder about this process is finish
-                        onLoadListener?.onLoadOrError(item.photo.id)
+                        onLoadListener?.onLoadOrError(item.photoId)
                         return false
                     }
                 })

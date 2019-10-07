@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    //
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
     implementation("androidx.annotation:annotation:1.1.0")
     //
@@ -50,6 +52,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     //
     api("com.jakewharton.timber:timber:4.7.1")
+    //
+    api("androidx.room:room-runtime:2.1.0")
+    api("androidx.room:room-rxjava2:2.1.0")
+    kapt("androidx.room:room-compiler:2.1.0")
     //
     testImplementation("junit:junit:4.12")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")

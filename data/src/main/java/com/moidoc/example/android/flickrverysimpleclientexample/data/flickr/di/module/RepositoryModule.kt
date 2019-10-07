@@ -1,9 +1,12 @@
 package com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.di.module
 
+import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrRestApi
+import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrStaticApi
+import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.cache.LastRecentCache
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.provider.FlickrPhotosListProvider
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 /**
@@ -11,14 +14,18 @@ import javax.inject.Singleton
  * todo split [FlickrPhotosListProvider] to interface and implementation and move to java domain module (or left as is with injected construtor)
  */
 @Module
-abstract class RepositoryModule {
+class RepositoryModule {
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun providePhotosListRepository(photosListRepository: PhotosListRepository): PhotosListRepository
+    fun providePhotosListRepository(photosListProvider: FlickrPhotosListProvider, lastRecentCache: LastRecentCache): PhotosListRepository {
+        return PhotosListRepository(photosListProvider, lastRecentCache)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun providePhotosListProvider(photosListProvider: FlickrPhotosListProvider): FlickrPhotosListProvider
+    fun providePhotosListProvider(flickrRestApi: FlickrRestApi, flickrStaticApi: FlickrStaticApi): FlickrPhotosListProvider {
+        return FlickrPhotosListProvider(flickrRestApi, flickrStaticApi)
+    }
 
 }

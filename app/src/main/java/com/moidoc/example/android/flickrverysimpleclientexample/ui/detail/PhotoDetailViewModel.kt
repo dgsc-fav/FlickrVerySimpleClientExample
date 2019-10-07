@@ -10,6 +10,7 @@ import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repo
 import com.moidoc.example.android.flickrverysimpleclientexample.vm.BaseViewModel
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 sealed class PhotoDetailFragmentAction(val bundle: Bundle) {
 }
@@ -38,12 +39,13 @@ class PhotoDetailViewModel : BaseViewModel<PhotoDetailFragmentAction>() {
 
         // get photo data from the repository and post data to the observer
 
-        repository.getPhoto(photoId!!)?.let {
-            photoUrl.postValue(it.url)
+        // todo coroutines
+        thread {
+            repository.getPhoto(photoId!!)?.let {
+                photoUrl.postValue(it.url)
+            }
         }
     }
 
     fun watchPhotoUrl(): LiveData<String> = photoUrl
-
-
 }

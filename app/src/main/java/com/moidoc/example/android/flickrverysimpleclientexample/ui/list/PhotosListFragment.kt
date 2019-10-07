@@ -203,7 +203,7 @@ class PhotosListFragment : BaseFragment<PhotosListFragmentAction, PhotosListView
                         return
                     }
 
-                    existSharedElementId = clickedPhotosListItem.photo.id
+                    existSharedElementId = clickedPhotosListItem.photoId
 
                     // Map the first shared element name to the child ImageView.
                     sharedElements[names[0]] = selectedViewHolder.itemView.findViewById(R.id.item_image)

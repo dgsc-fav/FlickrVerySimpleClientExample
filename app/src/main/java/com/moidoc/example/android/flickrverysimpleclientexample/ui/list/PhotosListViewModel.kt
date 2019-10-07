@@ -74,11 +74,10 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
                 // take only 20 items as specified in the [README.md]
                 val items = repository.getRecentPhotos(refresh = refresh, count = 20).map {
                     PhotosListItem(
-                        id = it.photo.id.toLong(),
-                        photo = it.photo
-                    ).apply {
+                        id = it.photoId.toLong(),
+                        photoId = it.photoId,
                         url = it.url
-                    }
+                    )
                 }
                 _photosList.postValue(items)
 
@@ -107,7 +106,7 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
 
         _navigationAction.value = PhotosListFragmentAction.ShowDetailsScreen(
             bundle = Bundle().apply {
-                putString(context.getString(R.string.key_photo_id), photosListItem.photo.id)
+                putString(context.getString(R.string.key_photo_id), photosListItem.photoId)
             },
             extras = extras
         )

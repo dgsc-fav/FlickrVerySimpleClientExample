@@ -1,10 +1,18 @@
 package com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model
 
+import androidx.room.Entity
+import androidx.room.Index
+
+@Entity(
+    tableName = "LastRecent",
+    primaryKeys = ["id"],
+    indices = [Index(value = ["id", "photoId"], unique = true)]
+)
 data class PhotoModel(
     // an database _id
-    val id: Int?,
-    // the flickr photo model (used direct from the models. if you a Clean Arch adept you can map [Photo] to other data class)
-    val photo: Photo,
+    var id: Int?,
+    // [Photo.id]
+    var photoId: String,
     // url of the photo
     var url: String
 )

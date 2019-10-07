@@ -31,3 +31,6 @@ data class Photo(
     val server: String,
     val title: String
 )
+
+val statOk: String = "ok"
+val statFail: String = "fail"
