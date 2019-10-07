@@ -1,7 +1,6 @@
 package com.moidoc.example.android.flickrverysimpleclientexample.di.component
 
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrRestApi
-import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrStaticApi
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.di.module.ContextModule
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.di.module.DatabaseModule
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.di.module.FlickrModule
@@ -27,13 +26,9 @@ interface InfrastructureComponent {
 
     fun getFlickrRestApi(): FlickrRestApi
 
-    fun getFlickrStaticApi(): FlickrStaticApi
-
     fun main(): MainDatabase
 
     fun providePhotosListProvider(): FlickrPhotosListProvider
 
     fun providePhotosListRepository(): PhotosListRepository
-
-    //fun getLastRecentDao(): LastRecentDao
 }

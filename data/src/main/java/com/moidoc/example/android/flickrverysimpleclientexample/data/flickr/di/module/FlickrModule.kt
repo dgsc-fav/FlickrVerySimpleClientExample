@@ -1,7 +1,6 @@
 package com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.di.module
 
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrRestApi
-import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrStaticApi
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -19,11 +18,5 @@ class FlickrModule {
             .baseUrl(FlickrRestApi.restApiBaseUrl)
             .build()
             .create(FlickrRestApi::class.java)
-    }
-
-    @Provides
-    internal fun provideFlickrStaticApi(retrofit: Retrofit): FlickrStaticApi {
-        // for the static api left the base url as is - it will be ignored by the api methods
-        return retrofit.create(FlickrStaticApi::class.java)
     }
 }

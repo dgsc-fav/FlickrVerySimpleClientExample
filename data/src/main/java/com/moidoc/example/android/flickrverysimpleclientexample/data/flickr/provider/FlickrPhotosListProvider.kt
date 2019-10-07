@@ -3,7 +3,6 @@ package com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.pro
 import androidx.annotation.WorkerThread
 import com.moidoc.example.android.flickrverysimpleclientexample.data.BuildConfig
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrRestApi
-import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrStaticApi
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model.Photo
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model.PhotoModel
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model.PhotosResponse
@@ -11,8 +10,7 @@ import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.mode
 import retrofit2.Response
 import timber.log.Timber
 
-class FlickrPhotosListProvider
-constructor(private val flickrRestApi: FlickrRestApi, private val flickrStaticApi: FlickrStaticApi) {
+class FlickrPhotosListProvider(private val flickrRestApi: FlickrRestApi) {
 
     init {
         Timber.e("\n\n\nFlickrPhotosListProvider\n\n\n")

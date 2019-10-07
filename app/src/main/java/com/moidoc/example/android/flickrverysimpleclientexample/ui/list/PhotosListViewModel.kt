@@ -10,9 +10,9 @@ import com.moidoc.example.android.flickrverysimpleclientexample.App
 import com.moidoc.example.android.flickrverysimpleclientexample.R
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
 import com.moidoc.example.android.flickrverysimpleclientexample.vm.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.concurrent.thread
 
 sealed class PhotosListFragmentAction(val bundle: Bundle, val extras: FragmentNavigator.Extras?) {
     /**
@@ -65,30 +65,34 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
             _photosListUpdateState.value = PhotosListUpdateState.CLEAR
         }
 
-        // todo coroutines
-        thread {
-            try {
+        addDisposableTask(
+            tag = getRecentPhotosTag,
+            coroutineDispatcher = Dispatchers.IO,
+            block = {
+                try {
 
-                _photosListUpdateState.postValue(PhotosListUpdateState.LOADING)
+                    _photosListUpdateState.postValue(PhotosListUpdateState.LOADING)
 
-                // take only 20 items as specified in the [README.md]
-                val items = repository.getRecentPhotos(refresh = refresh, count = 20).map {
-                    PhotosListItem(
-                        id = it.photoId.toLong(),
-                        photoId = it.photoId,
-                        url = it.url
-                    )
+                    // take only 20 items as specified in the [README.md]
+                    val items = repository.getRecentPhotos(refresh = refresh, count = 20).map {
+                        PhotosListItem(
+                            id = it.photoId.toLong(),
+                            photoId = it.photoId,
+                            url = it.url
+                        )
+                    }
+                    _photosList.postValue(items)
+
+                    _photosListUpdateState.postValue(PhotosListUpdateState.LOADED)
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    _error.postValue(e)
+                    _photosListUpdateState.postValue(PhotosListUpdateState.LOADED)
+                } finally {
+                    clearTask(getRecentPhotosTag)
                 }
-                _photosList.postValue(items)
-
-                _photosListUpdateState.postValue(PhotosListUpdateState.LOADED)
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _error.postValue(e)
-                _photosListUpdateState.postValue(PhotosListUpdateState.LOADED)
-            }
-        }
+            })
     }
 
     fun onPhotoClick(context: Context, photosListItem: PhotosListItem) {
@@ -114,5 +118,9 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
 
     fun onPhotoLongClick(photosListItem: PhotosListItem) {
 
+    }
+
+    companion object {
+        const val getRecentPhotosTag = "getRecentPhotos"
     }
 }

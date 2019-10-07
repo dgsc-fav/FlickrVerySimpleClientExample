@@ -15,7 +15,6 @@ constructor(private val flickrPhotosListProvider: FlickrPhotosListProvider, priv
 
     @WorkerThread
     fun getRecentPhotos(refresh: Boolean, page: Int = 0, count: Int = Int.MAX_VALUE): List<PhotoModel> {
-
         if (refresh) {
             lastRecentCache.remove()
         }

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Index
 
 @Entity(
-    tableName = "LastRecent",
+    tableName = "last_recent",
     primaryKeys = ["id"],
     indices = [Index(value = ["id", "photoId"], unique = true)]
 )

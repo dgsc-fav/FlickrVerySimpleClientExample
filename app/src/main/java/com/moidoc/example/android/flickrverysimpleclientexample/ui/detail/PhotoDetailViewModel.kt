@@ -8,9 +8,9 @@ import com.moidoc.example.android.flickrverysimpleclientexample.App
 import com.moidoc.example.android.flickrverysimpleclientexample.R
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
 import com.moidoc.example.android.flickrverysimpleclientexample.vm.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.concurrent.thread
 
 sealed class PhotoDetailFragmentAction(val bundle: Bundle) {
 }
@@ -39,13 +39,20 @@ class PhotoDetailViewModel : BaseViewModel<PhotoDetailFragmentAction>() {
 
         // get photo data from the repository and post data to the observer
 
-        // todo coroutines
-        thread {
-            repository.getPhoto(photoId!!)?.let {
-                photoUrl.postValue(it.url)
-            }
-        }
+        addDisposableTask(
+            tag = getPhotoTag,
+            coroutineDispatcher = Dispatchers.IO,
+            block = {
+                repository.getPhoto(photoId!!)?.let {
+                    photoUrl.postValue(it.url)
+                }
+                clearTask(getPhotoTag)
+            })
     }
 
     fun watchPhotoUrl(): LiveData<String> = photoUrl
+
+    companion object {
+        const val getPhotoTag = "getPhoto"
+    }
 }

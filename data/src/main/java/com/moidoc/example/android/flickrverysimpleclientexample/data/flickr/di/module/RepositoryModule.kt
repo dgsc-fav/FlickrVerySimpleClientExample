@@ -1,7 +1,6 @@
 package com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.di.module
 
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrRestApi
-import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.api.FlickrStaticApi
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.cache.LastRecentCache
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.provider.FlickrPhotosListProvider
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
@@ -24,8 +23,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providePhotosListProvider(flickrRestApi: FlickrRestApi, flickrStaticApi: FlickrStaticApi): FlickrPhotosListProvider {
-        return FlickrPhotosListProvider(flickrRestApi, flickrStaticApi)
+    fun providePhotosListProvider(flickrRestApi: FlickrRestApi): FlickrPhotosListProvider {
+        return FlickrPhotosListProvider(flickrRestApi)
     }
 
 }
