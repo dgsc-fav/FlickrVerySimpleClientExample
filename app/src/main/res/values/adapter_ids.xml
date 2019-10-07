@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="root" type="id"/>
+    <item name="tag_position" type="id"/>
+    <item name="tag_click_type" type="id"/>
+</resources>
