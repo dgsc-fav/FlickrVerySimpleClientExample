@@ -4,31 +4,46 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.moidoc.example.android.flickrverysimpleclientexample.App
 import com.moidoc.example.android.flickrverysimpleclientexample.R
+import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
 import com.moidoc.example.android.flickrverysimpleclientexample.vm.BaseViewModel
+import timber.log.Timber
+import javax.inject.Inject
 
 sealed class PhotoDetailFragmentAction(val bundle: Bundle) {
 }
 
 class PhotoDetailViewModel : BaseViewModel<PhotoDetailFragmentAction>() {
 
+    @Inject
+    lateinit var repository: PhotosListRepository
     /**
      *
      */
-    private val photoUrl: MutableLiveData<Int> = MutableLiveData()
+    private val photoUrl: MutableLiveData<String> = MutableLiveData()
 
-    private var photoId: Int? = null
+    private var photoId: String? = null
 
-    fun onViewCreated(context: Context, arguments: Bundle?) {
-        photoId = arguments?.getInt(context.getString(R.string.key_photo_id)) ?: throw IllegalArgumentException("\"photoId\" is null")
+    init {
+        Timber.e("PhotosListViewModel")
 
-
-        photoUrl.postValue(R.drawable.mm)
-
-        // get photo data from the database and post data to the observer
+        App.appComponent.inject(this)
     }
 
-    fun watchPhotoUrl(): LiveData<Int> = photoUrl
+    fun onViewCreated(context: Context, arguments: Bundle?) {
+        photoId = arguments?.getString(context.getString(R.string.key_photo_id)) ?: throw IllegalArgumentException("\"photoId\" is null")
+
+        Timber.v("photoId=$photoId")
+
+        // get photo data from the repository and post data to the observer
+
+        repository.getPhoto(photoId!!)?.let {
+            photoUrl.postValue(it.url)
+        }
+    }
+
+    fun watchPhotoUrl(): LiveData<String> = photoUrl
 
 
 }

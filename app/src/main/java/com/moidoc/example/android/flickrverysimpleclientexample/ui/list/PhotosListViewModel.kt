@@ -2,15 +2,17 @@ package com.moidoc.example.android.flickrverysimpleclientexample.ui.list
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import com.moidoc.example.android.flickrverysimpleclientexample.App
 import com.moidoc.example.android.flickrverysimpleclientexample.R
-import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model.Photo
+import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
 import com.moidoc.example.android.flickrverysimpleclientexample.vm.BaseViewModel
 import timber.log.Timber
+import javax.inject.Inject
+import kotlin.concurrent.thread
 
 sealed class PhotosListFragmentAction(val bundle: Bundle, val extras: FragmentNavigator.Extras?) {
     /**
@@ -35,11 +37,16 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
     var clickedPhotosListItem: PhotosListItem? = null
         private set
 
+    @Inject
+    lateinit var repository: PhotosListRepository
+
     init {
         Timber.e("PhotosListViewModel")
 
+        App.appComponent.inject(this)
+
         // https://devcolibri.com/5-common-mistakes-when-using-architecture-components/
-        updateList(true)
+        updateList(false)
     }
 
     /**
@@ -52,28 +59,37 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
 
     fun updateList(refresh: Boolean) {
         Timber.w("updateList: $refresh")
+
         // todo test only
         if (refresh) {
             _photosListUpdateState.value = PhotosListUpdateState.CLEAR
-
-            Timber.w("_photosListUpdateState=${_photosListUpdateState.value}")
         }
-        _photosListUpdateState.value = PhotosListUpdateState.LOADING
-        Timber.w("_photosListUpdateState=${_photosListUpdateState.value}")
 
-        Handler().postDelayed(Runnable {
-            val items = IntRange(0, 19).map {
-                PhotosListItem(id = it, photo = Photo.empty).apply {
-                    urlId = R.drawable.mm
+        // todo coroutines
+        thread {
+            try {
+
+                _photosListUpdateState.postValue(PhotosListUpdateState.LOADING)
+
+                // take only 20 items as specified in the [README.md]
+                val items = repository.getRecentPhotos(refresh = refresh, count = 20).map {
+                    PhotosListItem(
+                        id = it.photo.id.toLong(),
+                        photo = it.photo
+                    ).apply {
+                        url = it.url
+                    }
                 }
+                _photosList.postValue(items)
+
+                _photosListUpdateState.postValue(PhotosListUpdateState.LOADED)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _error.postValue(e)
+                _photosListUpdateState.postValue(PhotosListUpdateState.LOADED)
             }
-
-            _photosList.postValue(items)
-
-            _photosListUpdateState.postValue(PhotosListUpdateState.LOADED)
-
-            Timber.w("_photosListUpdateState=${_photosListUpdateState.value}")
-        }, 20)
+        }
     }
 
     fun onPhotoClick(context: Context, photosListItem: PhotosListItem) {
@@ -91,7 +107,7 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
 
         _navigationAction.value = PhotosListFragmentAction.ShowDetailsScreen(
             bundle = Bundle().apply {
-                putInt(context.getString(R.string.key_photo_id), photosListItem.id)
+                putString(context.getString(R.string.key_photo_id), photosListItem.photo.id)
             },
             extras = extras
         )

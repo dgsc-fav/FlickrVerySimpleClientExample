@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.moidoc.example.android.flickrverysimpleclientexample.R
+import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.BaseFragment
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.OnLoadListener
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarHolder
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapter.AdapterCallback
@@ -26,18 +27,17 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Transition animations was inspired by https://github.com/android/animation-samples
  */
-class PhotosListFragment : Fragment(), OnLoadListener {
-
-    private lateinit var viewModel: PhotosListViewModel
+class PhotosListFragment : BaseFragment<PhotosListFragmentAction, PhotosListViewModel>(),
+    OnLoadListener {
 
     private lateinit var adapter: PhotosListAdapter<RecyclerView.ViewHolder>
-    
+
     private lateinit var enterTransitionStarted: AtomicBoolean
 
     /**
      * The id of clicked item. Check this to allow call [Fragment.postponeEnterTransition] if exists shared element when we go back from the [PhotoDetailFragment]
      */
-    private var existSharedElementId: Int? = null
+    private var existSharedElementId: String? = null
 
     /** The screen navigation observer */
     private val navigationActionObserver: Observer<in PhotosListFragmentAction> = Observer { action ->
@@ -134,14 +134,12 @@ class PhotosListFragment : Fragment(), OnLoadListener {
         )
         recycler_view.adapter = adapter
     }
-    
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(PhotosListViewModel::class.java)
+        existSharedElementId = existSharedElementId ?: savedInstanceState?.getString("existSharedElementId")
 
-        existSharedElementId = existSharedElementId ?: savedInstanceState?.getInt("existSharedElementId")
-        
         // postpone only of NOT first creation otherwise the fragment will not observe viewModel.
         // Wrong fragment state for observing?
         // so we obtain that there is exists shared element and if it not exist then do not call postponeEnterTransition
@@ -150,7 +148,7 @@ class PhotosListFragment : Fragment(), OnLoadListener {
             enterTransitionStarted = AtomicBoolean()
             postponeEnterTransition()
         }
-        
+
         /// observe live data
         // screen navigation observer
         viewModel.navigationAction.observe(viewLifecycleOwner, navigationActionObserver)
@@ -160,6 +158,10 @@ class PhotosListFragment : Fragment(), OnLoadListener {
         viewModel.photosList.observe(viewLifecycleOwner, listObserver)
 
         viewModel.onViewCreated(savedInstanceState)
+    }
+
+    override fun initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(PhotosListViewModel::class.java)
     }
 
     override fun onResume() {
@@ -172,7 +174,7 @@ class PhotosListFragment : Fragment(), OnLoadListener {
         super.onSaveInstanceState(outState)
         // save the flag
         existSharedElementId?.let { id ->
-            outState.putInt("existSharedElementId", id)
+            outState.putString("existSharedElementId", id)
         }
     }
 
@@ -201,7 +203,7 @@ class PhotosListFragment : Fragment(), OnLoadListener {
                         return
                     }
 
-                    existSharedElementId = clickedPhotosListItem.id
+                    existSharedElementId = clickedPhotosListItem.photo.id
 
                     // Map the first shared element name to the child ImageView.
                     sharedElements[names[0]] = selectedViewHolder.itemView.findViewById(R.id.item_image)
@@ -211,7 +213,7 @@ class PhotosListFragment : Fragment(), OnLoadListener {
 
     /// OnLoadListener functions
 
-    override fun onLoadOrError(photoId: Int) {
+    override fun onLoadOrError(photoId: String) {
         // todo whether check photoId or not - image loading will be quick - all data are stored in a cache
         if (photoId != existSharedElementId) return
 

@@ -1,10 +1,13 @@
 package com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model
+
 import androidx.annotation.Keep
 
 @Keep
 data class PhotosResponse(
     val photos: Photos,
-    val stat: String
+    val stat: String,
+    val code: Int,
+    val message: String
 )
 
 @Keep
@@ -27,8 +30,4 @@ data class Photo(
     val secret: String,
     val server: String,
     val title: String
-) {
-    companion object {
-        val empty = Photo(0, "", 0, 0, 0, "", "", "", "")
-    }
-}
+)

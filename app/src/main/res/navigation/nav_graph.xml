@@ -22,6 +22,6 @@
         android:label="PhotoDetailFragment">
         <argument
             android:name="@string/key_photo_id"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
 </navigation>

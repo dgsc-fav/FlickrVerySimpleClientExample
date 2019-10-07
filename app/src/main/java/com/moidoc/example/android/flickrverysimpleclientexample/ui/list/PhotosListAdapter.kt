@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -63,16 +64,18 @@ class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterC
 
         h.progress.visibility = View.VISIBLE
 
-        item.urlId?.let {
-            
+        item.url?.let {
             Glide.with(context)
-                .load(item.urlId)
+                .load(item.url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .listener(object: RequestListener<Drawable>{
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                         h.progress.visibility = View.GONE
                         // also dispatch an event that image loaded with fail
                         // we do not carry about loading result we just wonder about this process is finish
-                        onLoadListener?.onLoadOrError(item.id)
+                        onLoadListener?.onLoadOrError(item.photo.id)
+
+                        h.image.setImageResource(android.R.drawable.ic_menu_report_image)
                         return false
                     }
 
@@ -86,7 +89,7 @@ class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterC
                         h.progress.visibility = View.GONE
                         // also dispatch an event that image loaded successfully
                         // we do not carry about loading result we just wonder about this process is finish
-                        onLoadListener?.onLoadOrError(item.id)
+                        onLoadListener?.onLoadOrError(item.photo.id)
                         return false
                     }
                 })

@@ -25,7 +25,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument("clearPackageData", "true")
 
-        buildConfigField("String", "FLICKR_API_KEY", "\"da9d38d3dee82ec8dda8bb0763bf5d9\"")
+        buildConfigField("String", "FLICKR_API_KEY", "\"da9d38d3dee82ec8dda8bb0763bf5d9c\"")
     }
     buildTypes {
         getByName("release") {

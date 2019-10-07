@@ -16,7 +16,7 @@ class FlickrModule {
     internal fun provideFlickrRestApi(retrofit: Retrofit) : FlickrRestApi {
         // for the rest api change the base url
         return retrofit.newBuilder()
-            .baseUrl(FlickrRestApi.restApiBaseUrlR)
+            .baseUrl(FlickrRestApi.restApiBaseUrl)
             .build()
             .create(FlickrRestApi::class.java)
     }

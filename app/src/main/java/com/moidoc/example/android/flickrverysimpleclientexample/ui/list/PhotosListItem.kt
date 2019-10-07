@@ -5,7 +5,7 @@ import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.mode
 
 class PhotosListItem(
     // an database _id
-    val id: Int,
+    val id: Long,
     // the flickr photo model (used direct from the models. if you a Clean Arch adept you can map [Photo] to other data class)
     val photo: Photo
 ) {
@@ -15,6 +15,4 @@ class PhotosListItem(
 
     // url of the photo
     var url: String? = null
-
-    var urlId: Int? = null
 }

@@ -6,7 +6,6 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -15,18 +14,17 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.moidoc.example.android.flickrverysimpleclientexample.R
+import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.BaseFragment
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarHolder
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarResolver
 import kotlinx.android.synthetic.main.fragment_photo_detail.*
 import timber.log.Timber
 
-class PhotoDetailFragment : Fragment(),
+class PhotoDetailFragment : BaseFragment<PhotoDetailFragmentAction, PhotoDetailViewModel>(),
     ToolbarResolver {
 
-    private val photoId: Int by lazy { arguments?.getInt(requireContext().getString(R.string.key_photo_id)) ?: -1 }
-
-    private lateinit var viewModel: PhotoDetailViewModel
-
+    private val photoId: String? by lazy { arguments?.getString(requireContext().getString(R.string.key_photo_id)) }
+    
     /** The screen navigation observer */
     private val navigationActionObserver: Observer<in PhotoDetailFragmentAction> = Observer { action ->
         Timber.v("do action: ${action?.javaClass?.simpleName}, with bundle=${action?.bundle}")
@@ -54,21 +52,19 @@ class PhotoDetailFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        details_image.transitionName = photoId.toString()
+        details_image.transitionName = photoId
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(PhotoDetailViewModel::class.java)
-
         /// observe live data
         // screen navigation
         viewModel.navigationAction.observe(viewLifecycleOwner, navigationActionObserver)
 
-        viewModel.watchPhotoUrl().observe(viewLifecycleOwner, Observer {
+        viewModel.watchPhotoUrl().observe(viewLifecycleOwner, Observer { url ->
             Glide.with(requireContext())
-                .load(it)
+                .load(url)
                 .fitCenter()
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
@@ -91,7 +87,10 @@ class PhotoDetailFragment : Fragment(),
         })
 
         viewModel.onViewCreated(requireContext(), arguments)
+    }
 
+    override fun initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(PhotoDetailViewModel::class.java)
     }
 
     override fun onResume() {
