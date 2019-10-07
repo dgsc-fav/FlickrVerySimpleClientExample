@@ -45,7 +45,7 @@ class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterC
             }
 
             override fun areItemsTheSame(item1: PhotosListItem, item2: PhotosListItem): Boolean {
-                return item1.id == item2.id
+                return item1.photoId == item2.photoId
             }
 
             override fun areContentsTheSame(oldItem: PhotosListItem, newItem: PhotosListItem): Boolean {
@@ -60,41 +60,40 @@ class PhotosListAdapter<VH : RecyclerView.ViewHolder>(context: Context, adapterC
         item.adapterPosition = h.getAdapterPosition()
         item.sharedView = h.image
         // the unique transition name as string representation of the item id
-        h.image.transitionName = item.id.toString()
+        h.image.transitionName = item.photoId
 
         h.progress.visibility = View.VISIBLE
 
-        item.url?.let {
-            Glide.with(context)
-                .load(item.url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .listener(object: RequestListener<Drawable>{
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        h.progress.visibility = View.GONE
-                        // also dispatch an event that image loaded with fail
-                        // we do not carry about loading result we just wonder about this process is finish
-                        onLoadListener?.onLoadOrError(item.photoId)
+        Glide.with(context)
+            .load(item.url)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    h.progress.visibility = View.GONE
+                    // also dispatch an event that image loaded with fail
+                    // we do not carry about loading result we just wonder about this process is finish
+                    onLoadListener?.onLoadOrError(item.photoId)
 
-                        h.image.setImageResource(android.R.drawable.ic_menu_report_image)
-                        return false
-                    }
+                    h.image.setImageResource(android.R.drawable.ic_menu_report_image)
+                    return false
+                }
 
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        h.progress.visibility = View.GONE
-                        // also dispatch an event that image loaded successfully
-                        // we do not carry about loading result we just wonder about this process is finish
-                        onLoadListener?.onLoadOrError(item.photoId)
-                        return false
-                    }
-                })
-                .into(h.image)
-        }
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    h.progress.visibility = View.GONE
+                    // also dispatch an event that image loaded successfully
+                    // we do not carry about loading result we just wonder about this process is finish
+                    onLoadListener?.onLoadOrError(item.photoId)
+                    return false
+                }
+            })
+            .into(h.image)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {

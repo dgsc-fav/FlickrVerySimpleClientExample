@@ -18,7 +18,6 @@ import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.BaseFr
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarHolder
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.ToolbarResolver
 import kotlinx.android.synthetic.main.fragment_photo_detail.*
-import timber.log.Timber
 
 class PhotoDetailFragment : BaseFragment<PhotoDetailFragmentAction, PhotoDetailViewModel>(),
     ToolbarResolver {
@@ -27,8 +26,6 @@ class PhotoDetailFragment : BaseFragment<PhotoDetailFragmentAction, PhotoDetailV
     
     /** The screen navigation observer */
     private val navigationActionObserver: Observer<in PhotoDetailFragmentAction> = Observer { action ->
-        Timber.v("do action: ${action?.javaClass?.simpleName}, with bundle=${action?.bundle}")
-
         when (action) {
             // no action yet
         }

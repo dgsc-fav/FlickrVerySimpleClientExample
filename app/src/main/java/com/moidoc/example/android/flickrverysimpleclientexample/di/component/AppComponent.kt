@@ -10,7 +10,4 @@ import dagger.Component
 interface AppComponent {
     fun inject(photosListViewModel: PhotosListViewModel)
     fun inject(photoDetailViewModel: PhotoDetailViewModel)
-
-
-    //fun getLastRecentDao(): LastRecentDao
 }

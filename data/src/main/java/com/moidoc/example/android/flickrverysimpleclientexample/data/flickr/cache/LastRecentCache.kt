@@ -3,7 +3,6 @@ package com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.cac
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model.PhotoModel
 import com.moidoc.example.android.flickrverysimpleclientexample.data.storage.MainDatabase
 import com.moidoc.example.android.flickrverysimpleclientexample.data.storage.dao.LastRecentDao
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,10 +17,6 @@ constructor(mainDatabase: MainDatabase) {
     private val inMemory: MutableList<PhotoModel> = mutableListOf()
     // in-db cache
     private val inPermanent: LastRecentDao = mainDatabase.lastRecentDao()
-
-    init {
-        Timber.e("!!!!!!!!!!!!! LastRecentCache !!!!!!!!!!!!! ")
-    }
 
     fun remove() {
         inMemory.clear()

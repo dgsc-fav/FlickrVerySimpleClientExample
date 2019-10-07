@@ -24,11 +24,11 @@ import javax.inject.Singleton
 )
 interface InfrastructureComponent {
 
-    fun getFlickrRestApi(): FlickrRestApi
+    fun flickrRestApi(): FlickrRestApi
 
-    fun main(): MainDatabase
+    fun mainDatabase(): MainDatabase
 
-    fun providePhotosListProvider(): FlickrPhotosListProvider
+    fun flickrPhotosListProvider(): FlickrPhotosListProvider
 
-    fun providePhotosListRepository(): PhotosListRepository
+    fun photosListRepository(): PhotosListRepository
 }

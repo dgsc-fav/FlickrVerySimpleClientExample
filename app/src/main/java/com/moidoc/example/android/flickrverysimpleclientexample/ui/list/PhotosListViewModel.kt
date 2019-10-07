@@ -11,7 +11,6 @@ import com.moidoc.example.android.flickrverysimpleclientexample.R
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
 import com.moidoc.example.android.flickrverysimpleclientexample.vm.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import timber.log.Timber
 import javax.inject.Inject
 
 sealed class PhotosListFragmentAction(val bundle: Bundle, val extras: FragmentNavigator.Extras?) {
@@ -41,26 +40,18 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
     lateinit var repository: PhotosListRepository
 
     init {
-        Timber.e("PhotosListViewModel")
-
         App.appComponent.inject(this)
 
         // https://devcolibri.com/5-common-mistakes-when-using-architecture-components/
         updateList(false)
     }
 
-    /**
-     * [savedInstanceState] defines this is first start or not
-     */
     fun onViewCreated(savedInstanceState: Bundle?) {
         // no arguments need for the photos list
-        Timber.w("onViewCreated: $savedInstanceState")
     }
 
     fun updateList(refresh: Boolean) {
-        Timber.w("updateList: $refresh")
 
-        // todo test only
         if (refresh) {
             _photosListUpdateState.value = PhotosListUpdateState.CLEAR
         }
@@ -76,7 +67,6 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
                     // take only 20 items as specified in the [README.md]
                     val items = repository.getRecentPhotos(refresh = refresh, count = 20).map {
                         PhotosListItem(
-                            id = it.photoId.toLong(),
                             photoId = it.photoId,
                             url = it.url
                         )
@@ -101,7 +91,7 @@ class PhotosListViewModel : BaseViewModel<PhotosListFragmentAction>() {
         var extras: FragmentNavigator.Extras? = null
 
         photosListItem.sharedView?.let { sharedView ->
-            val transitionName = photosListItem.id.toString()
+            val transitionName = photosListItem.photoId
 
             extras = FragmentNavigatorExtras(
                 sharedView to transitionName

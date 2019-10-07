@@ -21,7 +21,6 @@ import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapte
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.adapter.ClickType
 import com.moidoc.example.android.flickrverysimpleclientexample.ui.common.decoration.GridSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_photos_list.*
-import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -55,8 +54,6 @@ class PhotosListFragment : BaseFragment<PhotosListFragmentAction, PhotosListView
 
     private val stateObserver: Observer<in PhotosListUpdateState> = Observer { photosListUpdateState ->
 
-        Timber.e("stateObserver=$photosListUpdateState")
-
         when (photosListUpdateState) {
             PhotosListUpdateState.CLEAR -> {
                 adapter.clear()
@@ -74,19 +71,8 @@ class PhotosListFragment : BaseFragment<PhotosListFragmentAction, PhotosListView
     }
 
     private val listObserver: Observer<in List<PhotosListItem>> = Observer {
-        Timber.e("listObserver=${it.size}")
         // add items. clearing adapter if refreshing will be called in viewModel.photosListUpdateState observer
         adapter.addItems(it)
-
-//        if (::enterTransitionStarted.isInitialized && !enterTransitionStarted.getAndSet(true)) {
-//            // https://medium.com/androiddevelopers/fragment-transitions-ea2726c3f36f
-//            // Data is loaded so lets wait for our parent to be drawn
-//            (view?.parent as? ViewGroup)?.doOnPreDraw {
-//                // Parent has been drawn. Start transitioning!
-//                Timber.v("startPostponedEnterTransition")
-//                startPostponedEnterTransition()
-//            }
-//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -144,7 +130,6 @@ class PhotosListFragment : BaseFragment<PhotosListFragmentAction, PhotosListView
         // Wrong fragment state for observing?
         // so we obtain that there is exists shared element and if it not exist then do not call postponeEnterTransition
         if (existSharedElementId != null) {
-            Timber.v("postponeEnterTransition")
             enterTransitionStarted = AtomicBoolean()
             postponeEnterTransition()
         }

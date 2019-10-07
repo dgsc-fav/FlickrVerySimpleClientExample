@@ -8,13 +8,8 @@ import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.mode
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model.PhotosResponse
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.model.statOk
 import retrofit2.Response
-import timber.log.Timber
 
 class FlickrPhotosListProvider(private val flickrRestApi: FlickrRestApi) {
-
-    init {
-        Timber.e("\n\n\nFlickrPhotosListProvider\n\n\n")
-    }
 
     @WorkerThread
     fun getRecentPhotos(count: Int): List<PhotoModel> {

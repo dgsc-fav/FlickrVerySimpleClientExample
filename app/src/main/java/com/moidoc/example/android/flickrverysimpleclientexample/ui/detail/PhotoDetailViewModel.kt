@@ -9,7 +9,6 @@ import com.moidoc.example.android.flickrverysimpleclientexample.R
 import com.moidoc.example.android.flickrverysimpleclientexample.data.flickr.repository.PhotosListRepository
 import com.moidoc.example.android.flickrverysimpleclientexample.vm.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import timber.log.Timber
 import javax.inject.Inject
 
 sealed class PhotoDetailFragmentAction(val bundle: Bundle) {
@@ -27,15 +26,11 @@ class PhotoDetailViewModel : BaseViewModel<PhotoDetailFragmentAction>() {
     private var photoId: String? = null
 
     init {
-        Timber.e("PhotosListViewModel")
-
         App.appComponent.inject(this)
     }
 
     fun onViewCreated(context: Context, arguments: Bundle?) {
         photoId = arguments?.getString(context.getString(R.string.key_photo_id)) ?: throw IllegalArgumentException("\"photoId\" is null")
-
-        Timber.v("photoId=$photoId")
 
         // get photo data from the repository and post data to the observer
 
