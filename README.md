@@ -33,3 +33,7 @@ https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
 =======
 Исходный код (вся функциональность или сколько успели). Проект можно скинуть архивом в Telegram.
 t.me/littlequark
+
+
+TODO
+small fixes for glide, room
